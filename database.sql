@@ -1,0 +1,15 @@
+CREATE DATABASE IF NOT EXISTS smart_dustbin; USE smart_dustbin;
+CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY,name VARCHAR(80),email VARCHAR(120) UNIQUE,password_hash VARCHAR(100));
+CREATE TABLE IF NOT EXISTS bins(id INT AUTO_INCREMENT PRIMARY KEY,code VARCHAR(10) UNIQUE,location VARCHAR(100),lat DECIMAL(9,6),lng DECIMAL(9,6),fill TINYINT DEFAULT 0,battery TINYINT DEFAULT 100,last_cleaned DATETIME NULL,updated_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS alerts(id INT AUTO_INCREMENT PRIMARY KEY,bin_id INT,type ENUM('FULL','CLEANED'),message VARCHAR(200),created_at DATETIME DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(bin_id) REFERENCES bins(id));
+CREATE TABLE IF NOT EXISTS reports(id INT AUTO_INCREMENT PRIMARY KEY,bin_code VARCHAR(10),message VARCHAR(300),created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+-- Sample coordinates around Nashik: replace with the real GPS of each installed bin
+INSERT IGNORE INTO bins(code,location,lat,lng,fill,battery) VALUES
+('SD-001','CBS Bus Stand, Nashik',19.9975,73.7898,82,92),
+('SD-002','Panchavati, Ramkund',20.0063,73.7922,35,88),
+('SD-003','College Road',19.9990,73.7580,64,95),
+('SD-004','Dwarka Circle',19.9906,73.8006,58,81),
+('SD-005','Nashik Road Railway Station',19.9490,73.8310,22,76),
+('SD-006','Gangapur Road, Sula Junction',20.0150,73.7480,71,90),
+('SD-007','Satpur MIDC',20.0010,73.7350,45,84),
+('SD-008','Indira Nagar',19.9780,73.7990,10,97);
